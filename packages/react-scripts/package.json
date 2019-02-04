@@ -1,6 +1,6 @@
 {
   "name": "react-scripts-tailwindcss",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Forked Create React App, extended with Tailwind CSS.",
   "repository": "DemianD/create-react-app-tailwindcss",
   "license": "MIT",
