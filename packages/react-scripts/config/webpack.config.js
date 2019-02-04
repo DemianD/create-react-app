@@ -31,6 +31,9 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+const glob = require('glob-all');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
+
 // @remove-on-eject-begin
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
@@ -49,6 +52,13 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+
+// Tailwind Extractor for PurgeCSS
+class TailwindExtractor {
+  static extract(content) {
+    return content.match(/[A-Za-z0-9-_:/]+/g) || [];
+  }
+}
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -610,6 +620,20 @@ module.exports = function(webpackEnv) {
             // Exclude URLs containing a dot, as they're likely a resource in
             // public/ and not a SPA route
             new RegExp('/[^/]+\\.[^/]+$'),
+          ],
+        }),
+      isEnvProduction &&
+        new PurgecssPlugin({
+          // Specify the locations of any files you want to scan for class names.
+          paths: glob.sync([
+            `${paths.appSrc}/**/*.js`,
+            `${paths.appSrc}/**/*.jsx`,
+          ]),
+          extractors: [
+            {
+              extractor: TailwindExtractor,
+              extensions: ['js', 'jsx'],
+            },
           ],
         }),
       // TypeScript type checking
