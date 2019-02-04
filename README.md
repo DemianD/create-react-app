@@ -1,4 +1,4 @@
-# Create React App, included with TailwindCSS
+# Create React App, included with TailwindCSS and PurgeCSS
 
 <div align="center">
     <img src="./.github/react-tailwind-logo.png" />
@@ -7,6 +7,7 @@
 Create React apps with no build configuration.
 
 - Included with [TailwindCSS](https://tailwindcss.com)
+- Included with [PurgeCSS](https://www.purgecss.com)
 
 ## Quick overview
 
