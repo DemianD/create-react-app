@@ -1,7 +1,7 @@
 # Create React App, included with TailwindCSS
 
 <div align="center">
-    <img src="./.github/react-tailwind.png" />
+    <img src="./.github/react-tailwind-logo.png" />
 </div>
 
 Create React apps with no build configuration.
