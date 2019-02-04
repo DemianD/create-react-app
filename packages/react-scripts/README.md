@@ -1,7 +1,7 @@
 # Create React App, included with TailwindCSS and PurgeCSS
 
 <div align="center">
-    <img src="https://github.com/DemianD/create-react-app-tailwindcss/blob/master/.github/react-tailwind-logo.png" />
+    <img src="https://raw.githubusercontent.com/DemianD/create-react-app-tailwindcss/master/.github/react-tailwind-logo.png" />
 </div>
 
 Create React apps with no build configuration.
