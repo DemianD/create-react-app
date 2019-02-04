@@ -1,7 +1,18 @@
-# react-scripts
+# Create React App, included with TailwindCSS and PurgeCSS
 
-This package includes scripts and configuration used by [Create React App](https://github.com/facebook/create-react-app).<br>
-Please refer to its documentation:
+<div align="center">
+    <img src="https://github.com/DemianD/create-react-app-tailwindcss/blob/master/.github/react-tailwind-logo.png" />
+</div>
 
-- [Getting Started](https://facebook.github.io/create-react-app/docs/getting-started) – How to create a new app.
-- [User Guide](https://facebook.github.io/create-react-app/) – How to develop apps bootstrapped with Create React App.
+Create React apps with no build configuration.
+
+- Included with [TailwindCSS](https://tailwindcss.com)
+- Included with [PurgeCSS](https://www.purgecss.com)
+
+## Quick overview
+
+```bash
+npx create-react-app --scripts-version=react-scripts-tailwindcss my-app
+cd my-app
+npm start
+```
