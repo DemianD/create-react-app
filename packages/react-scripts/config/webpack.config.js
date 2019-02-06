@@ -630,11 +630,12 @@ module.exports = function(webpackEnv) {
           paths: glob.sync([
             `${paths.appSrc}/**/*.js`,
             `${paths.appSrc}/**/*.jsx`,
+            `${paths.appPublic}/**/*.html`,
           ]),
           extractors: [
             {
               extractor: TailwindExtractor,
-              extensions: ['js', 'jsx'],
+              extensions: ['js', 'jsx', 'html'],
             },
           ],
         }),
