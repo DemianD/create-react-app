@@ -8,7 +8,7 @@
 
 'use strict';
 
-const chalk = require('chalk');
+const chalk = require('react-dev-utils/chalk');
 const fs = require('fs');
 const resolve = require('resolve');
 const path = require('path');
@@ -18,11 +18,17 @@ const immer = require('react-dev-utils/immer').produce;
 const globby = require('react-dev-utils/globby').sync;
 
 function writeJson(fileName, object) {
-  fs.writeFileSync(fileName, JSON.stringify(object, null, 2) + os.EOL);
+  fs.writeFileSync(
+    fileName,
+    JSON.stringify(object, null, 2).replace(/\n/g, os.EOL) + os.EOL
+  );
 }
 
 function verifyNoTypeScript() {
-  const typescriptFiles = globby('**/*.(ts|tsx)', { cwd: paths.appSrc });
+  const typescriptFiles = globby(
+    ['**/*.(ts|tsx)', '!**/node_modules', '!**/*.d.ts'],
+    { cwd: paths.appSrc }
+  );
   if (typescriptFiles.length > 0) {
     console.warn(
       chalk.yellow(
@@ -172,14 +178,17 @@ function verifyTypeScriptSetup() {
 
     parsedCompilerOptions = result.options;
   } catch (e) {
-    console.error(
-      chalk.red.bold(
-        'Could not parse',
-        chalk.cyan('tsconfig.json') + '.',
-        'Please make sure it contains syntactically correct JSON.'
-      )
-    );
-    console.error(e && e.message ? `Details: ${e.message}` : '');
+    if (e && e.name === 'SyntaxError') {
+      console.error(
+        chalk.red.bold(
+          'Could not parse',
+          chalk.cyan('tsconfig.json') + '.',
+          'Please make sure it contains syntactically correct JSON.'
+        )
+      );
+    }
+
+    console.log(e && e.message ? `${e.message}` : '');
     process.exit(1);
   }
 

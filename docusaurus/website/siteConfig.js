@@ -11,11 +11,11 @@
 const siteConfig = {
   title: 'Create React App', // Title for your website.
   tagline: 'Set up a modern web app by running one command.',
-  url: 'https://facebook.github.io', // Your website URL
   // For github.io type URLs, you would set the url and baseUrl like:
   url: 'https://facebook.github.io',
   baseUrl: '/create-react-app/',
-  editUrl: 'https://github.com/facebook/create-react-app/edit/master/docusaurus/docs/',
+  editUrl:
+    'https://github.com/facebook/create-react-app/edit/master/docusaurus/docs/',
 
   // Used for publishing and more
   projectName: 'create-react-app',
@@ -86,7 +86,12 @@ const siteConfig = {
   algolia: {
     apiKey: '3be60f4f8ffc24c75da84857d6323791',
     indexName: 'create-react-app',
-  }
+  },
+
+  scrollToTop: true,
+  enableUpdateTime: true,
+  enableUpdateBy: true,
+  docsSideNavCollapsible: true,
 };
 
 module.exports = siteConfig;
