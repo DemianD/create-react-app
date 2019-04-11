@@ -24,7 +24,7 @@ npm install babel-preset-react-app --save-dev
 
 Then create a file named `.babelrc` with following contents in the root folder of your project:
 
-```json
+```js
 {
   "presets": ["react-app"]
 }
@@ -34,9 +34,9 @@ This preset uses the `useBuiltIns` option with [transform-object-rest-spread](ht
 
 ## Usage with Flow
 
-Make sure you have a `.flowconfig` file at the root directory. You can also use the `flow` option on `.babelrc`:
+Flow is enabled by default. Make sure you have a `.flowconfig` file at the root directory. You can also use the `flow` option on `.babelrc`:
 
-```json
+```
 {
   "presets": [["react-app", { "flow": true, "typescript": false }]]
 }
@@ -44,9 +44,9 @@ Make sure you have a `.flowconfig` file at the root directory. You can also use 
 
 ## Usage with TypeScript
 
-Make sure you have a `tsconfig.json` file at the root directory. You can also use the `typescript` option on `.babelrc`:
+TypeScript is enabled by default. Make sure you have a `tsconfig.json` file at the root directory. You can also use the `typescript` option on `.babelrc`:
 
-```json
+```
 {
   "presets": [["react-app", { "flow": false, "typescript": true }]]
 }

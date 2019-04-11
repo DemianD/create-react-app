@@ -10,27 +10,17 @@ import PropTypes from 'prop-types';
 
 class BuiltEmitter extends Component {
   static propTypes = {
-    error: PropTypes.string,
-    feature: PropTypes.func,
+    feature: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    const { error, feature } = this.props;
-
-    if (error) {
-      this.handleError(error);
-      return;
-    }
+    const { feature } = this.props;
 
     // Class components must call this.props.onReady when they're ready for the test.
     // We will assume functional components are ready immediately after mounting.
     if (!Component.isPrototypeOf(feature)) {
       this.handleReady();
     }
-  }
-
-  handleError(error) {
-    document.dispatchEvent(new Event('ReactFeatureError'));
   }
 
   handleReady() {
@@ -44,10 +34,9 @@ class BuiltEmitter extends Component {
     } = this;
     return (
       <div>
-        {feature &&
-          createElement(feature, {
-            onReady: handleReady,
-          })}
+        {createElement(feature, {
+          onReady: handleReady,
+        })}
       </div>
     );
   }
@@ -63,13 +52,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const url = window.location.href;
-    // const feature = window.location.hash.slice(1);
-    // This works around an issue of a duplicate hash in the href
-    // Ex: http://localhost:3001/#array-destructuring#array-destructuring
-    // This seems like a jsdom bug as the URL in initDom.js appears to be correct
-    const feature = url.slice(url.lastIndexOf('#') + 1);
-
+    const feature = window.location.hash.slice(1);
     switch (feature) {
       case 'array-destructuring':
         import('./features/syntax/ArrayDestructuring').then(f =>
@@ -240,7 +223,7 @@ class App extends Component {
         );
         break;
       default:
-        this.setState({ error: `Missing feature "${feature}"` });
+        throw new Error(`Missing feature "${feature}"`);
     }
   }
 
@@ -249,9 +232,9 @@ class App extends Component {
   }
 
   render() {
-    const { error, feature } = this.state;
-    if (error || feature) {
-      return <BuiltEmitter error={error} feature={feature} />;
+    const { feature } = this.state;
+    if (feature !== null) {
+      return <BuiltEmitter feature={feature} />;
     }
     return null;
   }

@@ -12,45 +12,45 @@ const codeFrame = require('@babel/code-frame').codeFrameColumns;
 const chalk = require('chalk');
 const fs = require('fs');
 
-const types = { diagnostic: 'TypeScript', lint: 'TSLint' };
-
 function formatter(message, useColors) {
-  const { type, severity, file, line, content, code, character } =
-    typeof message.getFile === 'function'
-      ? {
-          type: message.getType(),
-          severity: message.getSeverity(),
-          file: message.getFile(),
-          line: message.getLine(),
-          content: message.getContent(),
-          code: message.getCode(),
-          character: message.getCharacter(),
-        }
-      : message;
-
+  const hasGetters = typeof message.getFile === 'function';
   const colors = new chalk.constructor({ enabled: useColors });
   const messageColor = message.isWarningSeverity() ? colors.yellow : colors.red;
-  const fileAndNumberColor = colors.bold.cyan;
 
-  const source = file && fs.existsSync(file) && fs.readFileSync(file, 'utf-8');
-  const frame = source
-    ? codeFrame(
-        source,
-        { start: { line: line, column: character } },
-        { highlightCode: useColors }
-      )
-        .split('\n')
-        .map(str => '  ' + str)
-        .join(os.EOL)
-    : '';
+  let source;
+
+  if (hasGetters) {
+    source =
+      message.getFile() &&
+      fs.existsSync(message.getFile()) &&
+      fs.readFileSync(message.getFile(), 'utf-8');
+  } else {
+    source =
+      message.file &&
+      fs.existsSync(message.file) &&
+      fs.readFileSync(message.file, 'utf-8');
+  }
+
+  let frame = '';
+
+  if (source) {
+    frame = codeFrame(
+      source,
+      { start: { line: message.line, column: message.character } },
+      { highlightCode: useColors }
+    )
+      .split('\n')
+      .map(str => '  ' + str)
+      .join(os.EOL);
+  }
+
+  const severity = hasGetters ? message.getSeverity() : message.severity;
 
   return [
-    messageColor.bold(`${types[type]} ${severity.toLowerCase()} in `) +
-      fileAndNumberColor(`${file}(${line},${character})`) +
-      messageColor(':'),
-    content +
+    messageColor.bold(`Type ${severity.toLowerCase()}: `) +
+      (hasGetters ? message.getContent() : message.content) +
       '  ' +
-      messageColor.underline((type === 'lint' ? 'Rule: ' : 'TS') + code),
+      messageColor.underline(`TS${message.code}`),
     '',
     frame,
   ].join(os.EOL);

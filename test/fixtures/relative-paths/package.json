@@ -1,7 +1,4 @@
 {
-  "dependencies": {
-    "react": "latest",
-    "react-dom": "latest"
-  },
+  "dependencies": {},
   "homepage": "."
 }

@@ -113,7 +113,7 @@ const args = process.argv.slice(2);
 // Now run the CRA command
 const craScriptPath = path.join(packagesDir, 'create-react-app', 'index.js');
 cp.execSync(
-  `node ${craScriptPath} ${args.join(' ')} --scripts-version="${scriptsPath}"`,
+  `node ${craScriptPath} --scripts-version="${scriptsPath}" ${args.join(' ')}`,
   {
     cwd: rootDir,
     stdio: 'inherit',

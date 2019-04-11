@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import initDOM, { fetchFile } from './initDOM';
+import initDOM, { resourceLoader } from './initDOM';
 import url from 'url';
 
 const matchCSS = (doc, regexes) => {
@@ -17,11 +17,11 @@ const matchCSS = (doc, regexes) => {
         href = elem.href;
       }
     }
-
-    const textContent = fetchFile(url.parse(href));
-    for (const regex of regexes) {
-      expect(textContent).toMatch(regex);
-    }
+    resourceLoader({ url: url.parse(href) }, (_, textContent) => {
+      for (const regex of regexes) {
+        expect(textContent).toMatch(regex);
+      }
+    });
   } else {
     for (let i = 0; i < regexes.length; ++i) {
       expect(
@@ -33,111 +33,118 @@ const matchCSS = (doc, regexes) => {
 
 describe('Integration', () => {
   describe('Webpack plugins', () => {
-    let doc;
-
-    afterEach(() => {
-      doc && doc.defaultView.close();
-      doc = undefined;
-    });
-
     it('css inclusion', async () => {
-      doc = await initDOM('css-inclusion');
+      const doc = await initDOM('css-inclusion');
       matchCSS(doc, [
         /html\{/,
         /#feature-css-inclusion\{background:.+;color:.+}/,
       ]);
+      doc.defaultView.close();
     });
 
     it('css modules inclusion', async () => {
-      doc = await initDOM('css-modules-inclusion');
+      const doc = await initDOM('css-modules-inclusion');
       matchCSS(doc, [
         /.+style_cssModulesInclusion__.+\{background:.+;color:.+}/,
         /.+assets_cssModulesIndexInclusion__.+\{background:.+;color:.+}/,
       ]);
+      doc.defaultView.close();
     });
 
     it('scss inclusion', async () => {
-      doc = await initDOM('scss-inclusion');
+      const doc = await initDOM('scss-inclusion');
       matchCSS(doc, [/#feature-scss-inclusion\{background:.+;color:.+}/]);
+      doc.defaultView.close();
     });
 
     it('scss modules inclusion', async () => {
-      doc = await initDOM('scss-modules-inclusion');
+      const doc = await initDOM('scss-modules-inclusion');
       matchCSS(doc, [
         /.+scss-styles_scssModulesInclusion.+\{background:.+;color:.+}/,
         /.+assets_scssModulesIndexInclusion.+\{background:.+;color:.+}/,
       ]);
+      doc.defaultView.close();
     });
 
     it('sass inclusion', async () => {
-      doc = await initDOM('sass-inclusion');
+      const doc = await initDOM('sass-inclusion');
       matchCSS(doc, [/#feature-sass-inclusion\{background:.+;color:.+}/]);
+      doc.defaultView.close();
     });
 
     it('sass modules inclusion', async () => {
-      doc = await initDOM('sass-modules-inclusion');
+      const doc = await initDOM('sass-modules-inclusion');
       matchCSS(doc, [
         /.+sass-styles_sassModulesInclusion.+\{background:.+;color:.+}/,
         /.+assets_sassModulesIndexInclusion.+\{background:.+;color:.+}/,
       ]);
+      doc.defaultView.close();
     });
 
     it('image inclusion', async () => {
-      doc = await initDOM('image-inclusion');
+      const doc = await initDOM('image-inclusion');
 
       expect(doc.getElementById('feature-image-inclusion').src).toMatch(
         /^data:image\/jpeg;base64.+==$/
       );
+      doc.defaultView.close();
     });
 
     it('no ext inclusion', async () => {
-      doc = await initDOM('no-ext-inclusion');
+      const doc = await initDOM('no-ext-inclusion');
 
       expect(doc.getElementById('feature-no-ext-inclusion').href).toMatch(
         /\/static\/media\/aFileWithoutExt\.[a-f0-9]{8}\.bin$/
       );
+      doc.defaultView.close();
     });
 
     it('json inclusion', async () => {
-      doc = await initDOM('json-inclusion');
+      const doc = await initDOM('json-inclusion');
 
       expect(doc.getElementById('feature-json-inclusion').textContent).toBe(
         'This is an abstract.'
       );
+      doc.defaultView.close();
     });
 
     it('linked modules', async () => {
-      doc = await initDOM('linked-modules');
+      const doc = await initDOM('linked-modules');
 
       expect(doc.getElementById('feature-linked-modules').textContent).toBe(
         '2.0.0'
       );
+      doc.defaultView.close();
     });
 
     it('svg inclusion', async () => {
-      doc = await initDOM('svg-inclusion');
+      const doc = await initDOM('svg-inclusion');
       expect(doc.getElementById('feature-svg-inclusion').src).toMatch(
         /\/static\/media\/logo\..+\.svg$/
       );
+      doc.defaultView.close();
     });
 
     it('svg component', async () => {
-      doc = await initDOM('svg-component');
+      const doc = await initDOM('svg-component');
 
       expect(doc.getElementById('feature-svg-component').textContent).toBe('');
+      doc.defaultView.close();
     });
 
     it('svg in css', async () => {
-      doc = await initDOM('svg-in-css');
+      const doc = await initDOM('svg-in-css');
       matchCSS(doc, [/\/static\/media\/logo\..+\.svg/]);
+      doc.defaultView.close();
     });
 
     it('unknown ext inclusion', async () => {
-      doc = await initDOM('unknown-ext-inclusion');
+      const doc = await initDOM('unknown-ext-inclusion');
 
       expect(doc.getElementById('feature-unknown-ext-inclusion').href).toMatch(
         /\/static\/media\/aFileWithExt\.[a-f0-9]{8}\.unknown$/
       );
+      doc.defaultView.close();
     });
   });
 });
