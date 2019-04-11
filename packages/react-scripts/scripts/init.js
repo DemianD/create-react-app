@@ -124,7 +124,7 @@ module.exports = function(
 
   const procTailwind = spawn.sync(
     `${appPath}/node_modules/.bin/tailwind`,
-    ['init', path.join(appPath, 'tailwind.js')],
+    ['init', path.join(appPath, 'tailwind.config.js')],
     { stdio: 'inherit' }
   );
 
