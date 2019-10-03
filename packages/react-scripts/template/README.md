@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App TailwindCSS](https://github.com/DemianD/create-react-app-tailwindcss).
 
 ## Available Scripts
 

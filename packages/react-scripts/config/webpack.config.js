@@ -41,6 +41,15 @@ const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
 
+const glob = require('glob-all');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
+
+class TailwindExtractor {
+  static extract(content) {
+    return content.match(/[A-Za-z0-9-_:/]+/g) || [];
+  }
+}
+
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -112,6 +121,7 @@ module.exports = function(webpackEnv) {
           // https://github.com/facebook/create-react-app/issues/2677
           ident: 'postcss',
           plugins: () => [
+            require('tailwindcss')('./tailwind.config.js'),
             require('postcss-flexbugs-fixes'),
             require('postcss-preset-env')({
               autoprefixer: {
@@ -696,6 +706,20 @@ module.exports = function(webpackEnv) {
             // URLs containing a "?" character won't be blacklisted as they're likely
             // a route with query params (e.g. auth callbacks).
             new RegExp('/[^/?]+\\.[^/]+$'),
+          ],
+        }),
+      isEnvProduction &&
+        new PurgecssPlugin({
+          // Specify the locations of any files you want to scan for class names.
+          paths: glob.sync([
+            `${paths.appSrc}/**/*.js`,
+            `${paths.appSrc}/**/*.jsx`,
+          ]),
+          extractors: [
+            {
+              extractor: TailwindExtractor,
+              extensions: ['js', 'jsx'],
+            },
           ],
         }),
       // TypeScript type checking
