@@ -1,6 +1,6 @@
 {
   "name": "react-scripts-tailwindcss",
-  "version": "3.2.0",
+  "version": "3.2.0-rc.1",
   "description": "Forked Create React App, extended with Tailwind CSS.",
   "repository": {
     "type": "git",
